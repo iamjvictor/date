@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.input-style {
+  @apply w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-200;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* NOVAS CLASSES */
+.checkbox-label, .radio-label {
+  @apply block w-full text-center bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white cursor-pointer transition-all duration-200 ease-in-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.checkbox-label:hover, .radio-label:hover {
+  @apply bg-gray-600;
+}
+ 
+.checkbox-label.checked, input[type="radio"]:checked + label, .radio-label:has(input:checked) {
+  @apply bg-cyan-500 border-cyan-400 font-bold;
+}
+ 
+.checkbox-label.checked:hover {
+    @apply bg-cyan-600;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

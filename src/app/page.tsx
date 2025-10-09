@@ -168,7 +168,7 @@ export default function Home() {
               </div>
 
 
-              <button type="submit" disabled={isLoading} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 ease-in-out disabled:bg-gray-500">
+              <button type="submit" disabled={isLoading} className="w-full bg-cyan-400 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 ease-in-out disabled:bg-gray-500">
                 {isLoading ? 'Analisando o universo...' : 'Criar nosso encontro ideal!'}
               </button>
               {error && <p className="text-red-400 text-center mt-4">{error}</p>}

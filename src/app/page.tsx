@@ -87,8 +87,12 @@ export default function Home() {
       const result = await response.json();
       setDatePlan(result.plan);
       setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocorreu um erro desconhecido.');
+      }
     } finally {
       setIsLoading(false);
     }

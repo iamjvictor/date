@@ -1,7 +1,15 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-
+interface FormData {
+  email: string;
+  foods: string[];
+  drinks: string[];
+  fds: string;
+  tempoLivre: string;
+  vista: string;
+  role: string;
+}
 const ai = new GoogleGenAI({ apiKey: (process.env.GOOGLE_API_KEY ?? "") });
 console.log(process.env.GOOGLE_API_KEY);
 function requireEnv(name: string): string {
@@ -12,7 +20,7 @@ function requireEnv(name: string): string {
   return value;
 }
 // Envia o convite com o plano para o e-mail informado
-async function sendInviteEmail(to: string, data: any, plan: string) {
+async function sendInviteEmail(to: string, data:  FormData, plan: string) {
   const transporter = nodemailer.createTransport({
     host: requireEnv('SMTP_HOST'),
     port: parseInt(process.env.SMTP_PORT ?? '587', 10), // Garante que a porta é um número inteiro
@@ -48,7 +56,7 @@ async function sendInviteEmail(to: string, data: any, plan: string) {
 }
 
 // Envia um resumo das respostas para o seu e-mail
-async function sendOwnerSummaryEmail(to: string, data: any) {
+async function sendOwnerSummaryEmail(to: string, data: FormData) {
   const transporter = nodemailer.createTransport({
     host: requireEnv('SMTP_HOST'),
     port: parseInt(process.env.SMTP_PORT ?? '587', 10),

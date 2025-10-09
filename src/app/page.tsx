@@ -162,7 +162,7 @@ export default function Home() {
                       <option value="Calmo e intimista">Calmo e intimista</option>
                       <option value="Agitado e com música">Agitado e com música</option>
                       <option value="Em meio à natureza">Em meio à natureza</option>
-                      <option value="Uma balada pra dançar">Uma balada pra dançar</option>
+                      <option value="Uma balada">Uma balada pra dançar</option>
                   </select>
                 </div>
               </div>

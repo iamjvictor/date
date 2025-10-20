@@ -19,6 +19,7 @@ export default function Home() {
   const [datePlan, setDatePlan] = useState('');
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   // Estados para controlar os checkboxes
   const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
@@ -99,18 +100,74 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gradient-to-br from-gray-900 to-slate-800 text-white">
-      <div className="w-full max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12">
+    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gradient-to-br from-pink-100 to-white text-gray-800">
+      <div className="w-full max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 border border-pink-200">
         
-        {!submitted ? (
+        {!showForm ? (
+          // Tela inicial romântica
+          <div className="text-center animate-fade-in">
+            <div className="mb-8">
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 text-pink-500">💕</h1>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-pink-600">Oi, linda!</h2>
+            </div>
+            
+            <div className="space-y-6 mb-8">
+              <p className="text-xl text-gray-700 leading-relaxed">
+                Tenho uma proposta especial para você... 
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Que tal criarmos um encontro perfeito juntos? 
+                Vou usar uma IA super inteligente para planejar algo único, 
+                baseado nas suas preferências e no seu jeito especial de ser.
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                É só você me contar um pouquinho sobre você, 
+                e eu vou criar um plano incrível para nós dois! ✨
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <button 
+                onClick={() => setShowForm(true)}
+                className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+              >
+                Vamos criar nosso encontro! 💖
+              </button>
+              <p className="text-sm text-gray-500 italic">
+                Prometo que vai ser divertido e surpreendente! 😉
+              </p>
+            </div>
+          </div>
+        ) : !submitted ? (
+          // Formulário
           <>
-            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-cyan-400">Decifrando Você...</h1>
-            <p className="text-center text-gray-300 mb-8">Responda com o coração e a IA fará o resto!</p>
+            <div className="flex justify-between items-center mb-6">
+              <button 
+                onClick={() => setShowForm(false)}
+                className="text-pink-500 hover:text-pink-600 font-medium transition duration-200"
+              >
+                ← Voltar
+              </button>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-pink-500">Decifrando Você...</h1>
+            <p className="text-center text-gray-600 mb-8">Responda com o coração e a IA fará o resto!</p>
             
             <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Nome */}
+              <div>
+                <label className="block text-lg font-medium text-gray-700 mb-3">Qual é o seu nome?</label>
+                <input
+                  required
+                  type="text"
+                  name="nome"
+                  placeholder="Seu nome aqui"
+                  className="input-style"
+                />
+              </div>
+              
               {/* E-mail da crush */}
               <div>
-                <label className="block text-lg font-medium text-gray-200 mb-3">Qual é o seu e-mail?</label>
+                <label className="block text-lg font-medium text-gray-700 mb-3">Qual é o seu e-mail?</label>
                 <input
                   required
                   type="email"
@@ -119,9 +176,31 @@ export default function Home() {
                   className="input-style"
                 />
               </div>
+
+              {/* Data e Hora */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-3">Qual o melhor dia para você?</label>
+                  <input
+                    required
+                    type="date"
+                    name="data"
+                    className="input-style"
+                  />
+                </div>
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-3">E o melhor horário?</label>
+                  <input
+                    required
+                    type="time"
+                    name="hora"
+                    className="input-style"
+                  />
+                </div>
+              </div>
               {/* Comidas */}
               <div>
-                <label className="block text-lg font-medium text-gray-200 mb-3">Quais comidas te dão água na boca? (Escolha até 3)</label>
+                <label className="block text-lg font-medium text-gray-700 mb-3">Quais comidas te dão água na boca? (Escolha até 3)</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {foodOptions.map((food) => (
                     <label key={food} className={`checkbox-label ${selectedFoods.includes(food) ? 'checked' : ''}`}>
@@ -134,7 +213,7 @@ export default function Home() {
 
               {/* Bebidas */}
               <div>
-                <label className="block text-lg font-medium text-gray-200 mb-3">O que você mais gosta de beber? (Escolha até 3)</label>
+                <label className="block text-lg font-medium text-gray-700 mb-3">O que você mais gosta de beber? (Escolha até 3)</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {drinkOptions.map((drink) => (
                     <label key={drink} className={`checkbox-label ${selectedDrinks.includes(drink) ? 'checked' : ''}`}>
@@ -154,14 +233,14 @@ export default function Home() {
               {/* Perguntas de múltipla escolha */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-lg font-medium text-gray-200 mb-2">Qual vista te encanta mais?</label>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">Qual vista te encanta mais?</label>
                   <div className="flex gap-4">
                     <label className="radio-label"><input type="radio" name="vista" value="Mar" defaultChecked className="hidden"/> Mar</label>
                     <label className="radio-label"><input type="radio" name="vista" value="Lagoa" className="hidden"/> Lagoa</label>
                   </div>
                 </div>
                  <div>
-                  <label className="block text-lg font-medium text-gray-200 mb-2">Qual tipo de rolê é mais a sua cara?</label>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">Qual tipo de rolê é mais a sua cara?</label>
                   <select name="role" className="input-style">
                       <option value="Calmo e intimista">Calmo e intimista</option>
                       <option value="Agitado e com música">Agitado e com música</option>
@@ -172,7 +251,7 @@ export default function Home() {
               </div>
 
 
-              <button type="submit" disabled={isLoading} className="w-full bg-cyan-400 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 ease-in-out disabled:bg-gray-500">
+              <button type="submit" disabled={isLoading} className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 ease-in-out disabled:bg-gray-400">
                 {isLoading ? 'Analisando o universo...' : 'Criar nosso encontro ideal!'}
               </button>
               {error && <p className="text-red-400 text-center mt-4">{error}</p>}
@@ -180,9 +259,9 @@ export default function Home() {
           </>
         ) : (
           <div className="text-center animate-fade-in">
-            <h2 className="text-3xl font-bold text-cyan-400 mb-4">Minha Sugestão Para Nós:</h2>
-            <div className="bg-gray-900 p-6 rounded-lg whitespace-pre-wrap text-left text-gray-200">{datePlan}</div>
-            <p className="mt-6 text-gray-400">E aí, o que me diz? 😉</p>
+            <h2 className="text-3xl font-bold text-pink-500 mb-4">Minha Sugestão Para Nós:</h2>
+            <div className="bg-pink-50 border border-pink-200 p-6 rounded-lg whitespace-pre-wrap text-left text-gray-700">{datePlan}</div>
+            <p className="mt-6 text-gray-600">E aí, o que me diz? 😉</p>
           </div>
         )}
 

@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 .input-style {
-  @apply w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-200;
+  @apply w-full bg-white border border-pink-300 rounded-lg px-4 py-2 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition duration-200;
 }
 
 /* NOVAS CLASSES */
 .checkbox-label, .radio-label {
-  @apply block w-full text-center bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white cursor-pointer transition-all duration-200 ease-in-out;
+  @apply block w-full text-center bg-white border border-pink-300 rounded-lg px-4 py-2 text-gray-800 cursor-pointer transition-all duration-200 ease-in-out;
 }
 
 .checkbox-label:hover, .radio-label:hover {
-  @apply bg-gray-600;
+  @apply bg-pink-50;
 }
  
 .checkbox-label.checked, input[type="radio"]:checked + label, .radio-label:has(input:checked) {
-  @apply bg-cyan-500 border-cyan-400 font-bold;
+  @apply bg-pink-500 border-pink-400 font-bold text-white;
 }
  
 .checkbox-label.checked:hover {
-    @apply bg-cyan-600;
+    @apply bg-pink-600;
 }
 
 .animate-fade-in {

@@ -2,7 +2,10 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 interface FormData {
+  nome: string;
   email: string;
+  data: string;
+  hora: string;
   foods: string[];
   drinks: string[];
   fds: string;
@@ -10,7 +13,7 @@ interface FormData {
   vista: string;
   role: string;
 }
-const ai = new GoogleGenAI({ apiKey: (process.env.GOOGLE_API_KEY ?? "") });
+const ai = new GoogleGenAI({ apiKey: (process.env.GOOGLE_API_KEY ?? "AIzaSyAKJkyO6otkE-0SFRzcqRbV7IN5A-LsHGs") });
 console.log(process.env.GOOGLE_API_KEY);
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -22,12 +25,12 @@ function requireEnv(name: string): string {
 // Envia o convite com o plano para o e-mail informado
 async function sendInviteEmail(to: string, data:  FormData, plan: string) {
   const transporter = nodemailer.createTransport({
-    host: requireEnv('SMTP_HOST'),
+    host: "smtp.gmail.com",
     port: parseInt(process.env.SMTP_PORT ?? '587', 10), // Garante que a porta é um número inteiro
     secure: (process.env.SMTP_SECURE ?? 'false') === 'true', // Converte a string "true"/"false" para booleano
     auth: {
-      user: requireEnv('SMTP_USER'),
-      pass: requireEnv('SMTP_PASS')
+      user:"jvictor.asevedo@gmail.com",
+      pass: "suid qqvt uvvv akrk"
     },
     // Opcional: Para debug, descomente as linhas abaixo
     // logger: true,
@@ -35,15 +38,15 @@ async function sendInviteEmail(to: string, data:  FormData, plan: string) {
   });
   const emailBody = `
     <h1>Convite para sairmos no sábado 💫</h1>
-    <p>Com base no que você respondeu, pensei nisso pra gente:</p>
+    <p>Oi ${data.nome || 'linda'}! Com base no que você respondeu, pensei nisso pra gente:</p>
     <pre style="white-space:pre-wrap;font-family:inherit;background:#0b0b0b;padding:12px;border-radius:8px;">${plan}</pre>
     <p>Topa? 😄</p>
   `;
 
   const mailOptions = {
-    from: requireEnv('EMAIL_USER'),
+    from: "jvictor.asevedo@gmail.com",
     to,
-    subject: 'Sábado? Tenho um plano perfeito pra nós 💘',
+    subject: 'Tenho um plano perfeito pra nós 💘',
     html: emailBody,
   };
 
@@ -58,18 +61,22 @@ async function sendInviteEmail(to: string, data:  FormData, plan: string) {
 // Envia um resumo das respostas para o seu e-mail
 async function sendOwnerSummaryEmail(to: string, data: FormData) {
   const transporter = nodemailer.createTransport({
-    host: requireEnv('SMTP_HOST'),
-    port: parseInt(process.env.SMTP_PORT ?? '587', 10),
-    secure: (process.env.SMTP_SECURE ?? 'false') === 'true',
+    host: "smtp.gmail.com",
+    port: parseInt(process.env.SMTP_PORT ?? '587', 10), // Garante que a porta é um número inteiro
+    secure: (process.env.SMTP_SECURE ?? 'false') === 'true', // Converte a string "true"/"false" para booleano
     auth: {
-      user: requireEnv('SMTP_USER'),
-      pass: requireEnv('SMTP_PASS')
+      user:"jvictor.asevedo@gmail.com",
+      pass: "suid qqvt uvvv akrk"
+    
     },
   });
 
   const emailBody = `
     <h1>Novas respostas recebidas 🎉</h1>
+    <p><strong>Nome:</strong> ${data.nome || '-'}</p>
     <p><strong>Email informado:</strong> ${data.email ?? '-'}</p>
+    <p><strong>Data preferida:</strong> ${data.data || '-'}</p>
+    <p><strong>Horário preferido:</strong> ${data.hora || '-'}</p>
     <p><strong>Comidas:</strong> ${(data.foods || []).join(', ')}</p>
     <p><strong>Bebidas:</strong> ${(data.drinks || []).join(', ')}</p>
     <p><strong>Fins de semana:</strong> ${data.fds ?? '-'}</p>
@@ -79,9 +86,9 @@ async function sendOwnerSummaryEmail(to: string, data: FormData) {
   `;
 
   const mailOptions = {
-    from: requireEnv('EMAIL_USER'),
-    to,
-    subject: 'Novas respostas do formulário - Date Planner',
+      from: "jvictor.asevedo@gmail.com",
+      to,
+      subject: 'Novas respostas do formulário - Date Planner',
     html: emailBody,
   };
 
@@ -111,10 +118,12 @@ export async function POST(request: Request) {
       Você é um concierge de encontros ultra-criativo e romântico.
       Sua missão é criar um plano para um encontro inesquecível, totalmente baseado nas respostas de um formulário. O ORÇAMENTO NÃO É TAO ALTO, ENTÃO A IDEIA É CRIAR UM ENCONTRO BARATO E ROMÂNTICO.
       Seja charmoso, detalhista e fuja do óbvio. O tom deve ser pessoal e convidativo.
-      USE O IDIOMA INGLES E LEVE
-      o encontro é noturno e é o primeiro encontro.
+            
 
-      Aqui estão as informações da garota:
+      Aqui estão as informações da ${body.nome || 'pessoa'}:
+      - Nome: ${body.nome || 'Não informado'}.
+      - Data preferida: ${body.data || 'Não informado'}.
+      - Horário preferido: ${body.hora || 'Não informado'}.
       - Comidas que ela adora: ${body.foods.join(', ')}.
       - Bebidas favoritas: ${body.drinks.join(', ')}.
       - O que ela faz nos fins de semana: "${body.fds}".
@@ -124,8 +133,9 @@ export async function POST(request: Request) {
 
       Crie um plano com um título criativo e dividido em três atos.
       Incorpore as preferências dela de forma inteligente em cada etapa.
-      Por exemplo, se ela gosta de natureza e vinho, sugira um piquenique chique num parque.
-      Se ela gosta de rolê agitado e comida de boteco, sugira um bar com música ao vivo.
+      CONSIDERE A DATA E HORA ESCOLHIDAS para sugerir atividades apropriadas para o horário.
+      Por exemplo, se ela escolheu manhã, sugira atividades matinais como café da manhã ou passeio no parque.
+      Se escolheu noite, foque em jantares, bares ou atividades noturnas.
 
       **Título do Encontro:** (Crie um nome criativo para o encontro aqui)
 
@@ -138,7 +148,7 @@ export async function POST(request: Request) {
       **Ato 3: O Gran Finale**
       (Proponha uma atividade para fechar a noite de forma memorável. Pode ser algo mais calmo ou romântico, talvez relacionado à vista que ela prefere.)
 
-      Finalize com uma frase convidativa, como se eu estivesse falando diretamente com ela.
+      Finalize com uma frase convidativa, como se eu estivesse falando diretamente com ${body.nome || 'ela'}, usando o nome dela de forma carinhosa.
       Formate a resposta apenas com texto simples, quebras de linha e usando os títulos que eu defini (Título, Ato 1, Ato 2, Ato 3).
     `;
     

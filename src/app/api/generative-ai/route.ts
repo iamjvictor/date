@@ -114,11 +114,26 @@ export async function POST(request: Request) {
       foods: body.foods?.length || 0,
       drinks: body.drinks?.length || 0
     });
+    
+    console.log('DETALHES COMPLETOS DO FORMULÁRIO:');
+    console.log('Nome:', body.nome);
+    console.log('Email:', body.email);
+    console.log('Data:', body.data);
+    console.log('Hora:', body.hora);
+    console.log('Comidas escolhidas:', body.foods);
+    console.log('Bebidas escolhidas:', body.drinks);
+    console.log('Fins de semana:', body.fds);
+    console.log('Tempo livre:', body.tempoLivre);
+    console.log('Vista preferida:', body.vista);
+    console.log('Tipo de rolê:', body.role);
 
     // Validação básica
     if (!body.foods || body.foods.length === 0) {
+        console.log('ERRO: Nenhuma comida selecionada');
         return NextResponse.json({ error: "A seleção de comidas é obrigatória." }, { status: 400 });
     }
+    
+    console.log('Validação passou - dados válidos!');
 
     // Não enviar e-mail aqui; primeiro vamos gerar o plano
     console.log('Iniciando geração do plano com IA...');
@@ -163,6 +178,7 @@ export async function POST(request: Request) {
     `;
     
 
+    console.log('Chamando a IA Gemini...');
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,

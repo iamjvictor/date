@@ -14,7 +14,7 @@ interface FormData {
   role: string;
 }
 const ai = new GoogleGenAI({ apiKey: (process.env.GOOGLE_API_KEY ?? "AIzaSyAKJkyO6otkE-0SFRzcqRbV7IN5A-LsHGs") });
-console.log(process.env.GOOGLE_API_KEY);
+console.log('Google API Key carregada:', process.env.GOOGLE_API_KEY ? 'Sim' : 'Não');
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -103,8 +103,17 @@ async function sendOwnerSummaryEmail(to: string, data: FormData) {
 
 
 export async function POST(request: Request) {
+  console.log('=== NOVA REQUISIÇÃO RECEBIDA ===');
   try {
     const body = await request.json();
+    console.log('Dados recebidos:', {
+      nome: body.nome,
+      email: body.email,
+      data: body.data,
+      hora: body.hora,
+      foods: body.foods?.length || 0,
+      drinks: body.drinks?.length || 0
+    });
 
     // Validação básica
     if (!body.foods || body.foods.length === 0) {
@@ -112,6 +121,7 @@ export async function POST(request: Request) {
     }
 
     // Não enviar e-mail aqui; primeiro vamos gerar o plano
+    console.log('Iniciando geração do plano com IA...');
 
     // Prompt MUITO mais detalhado para a IA
     const prompt = `
@@ -157,17 +167,20 @@ export async function POST(request: Request) {
         model: "gemini-2.5-flash",
         contents: prompt,
       });
-    console.log(response.text);
+    console.log('Resposta da IA recebida:', response.text);
     const text = response.text ?? "";
 
     // Enviar convite para o e-mail informado, se presente
     if (typeof body.email === 'string' && body.email.trim().length > 0) {
+      console.log('Enviando convite para:', body.email.trim());
       sendInviteEmail(body.email.trim(), body, text);
     }
 
     // Sempre enviar um resumo das respostas para você
+    console.log('Enviando resumo para o proprietário...');
     sendOwnerSummaryEmail('joao-victor_07@outlook.com', body);
 
+    console.log('=== REQUISIÇÃO FINALIZADA COM SUCESSO ===');
     return NextResponse.json({ plan: text });
 
   } catch (error) {

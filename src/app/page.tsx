@@ -108,7 +108,7 @@ export default function Home() {
           <div className="text-center animate-fade-in">
             <div className="mb-8">
               <h1 className="text-5xl md:text-6xl font-bold mb-4 text-pink-500">💕</h1>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-pink-600">Oi, Lara!</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-pink-600">Oi, Ana!</h2>
             </div>
             
             <div className="space-y-6 mb-8">
